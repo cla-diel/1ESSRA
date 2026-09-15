@@ -1,4 +1,4 @@
-// 3. FUNÇÃO: Validação Matemática Algorítmica do CPF
+// FUNÇÃO: Validação Matemática Algorítmica do CPF
 function validarCPF(cpf) {
     // Limpa pontuações mantendo apenas números
     cpf = cpf.replace(/\D/g, '');
