@@ -21,36 +21,7 @@ function popularDatalistArtistas(lista) {
     });
 }
 
-// 3. FUNÇÃO: Validação Matemática Algorítmica do CPF
-function validarCPF(cpf) {
-    // Limpa pontuações mantendo apenas números
-    cpf = cpf.replace(/\D/g, '');
-
-    // Verifica tamanho de 11 dígitos ou sequências repetidas
-    if (cpf.length !== 11 || /^(\d)\1{10}$/.test(cpf)) return false;
-
-    // Cálculo do 1º Dígito Verificador
-    let soma = 0;
-    for (let i = 0; i < 9; i++) {
-        soma += parseInt(cpf.charAt(i)) * (10 - i);
-    }
-    let resto = (soma * 10) % 11;
-    if (resto === 10 || resto === 11) resto = 0;
-    if (resto !== parseInt(cpf.charAt(9))) return false;
-
-    // Cálculo do 2º Dígito Verificador
-    soma = 0;
-    for (let i = 0; i < 10; i++) {
-        soma += parseInt(cpf.charAt(i)) * (11 - i);
-    }
-    resto = (soma * 10) % 11;
-    if (resto === 10 || resto === 11) resto = 0;
-    if (resto !== parseInt(cpf.charAt(10))) return false;
-
-    return true; // CPF Válido
-}
-
-// 4. Máscaras Dinâmicas (CPF e Celular)
+// 3. Máscaras Dinâmicas (CPF e Celular)
 campoCpf.addEventListener('input', function() {
     let valor = campoCpf.value.replace(/\D/g, '');
     valor = valor.replace(/(\d{3})(\d)/, '$1.$2');
@@ -66,7 +37,7 @@ campoCelular.addEventListener('input', function() {
     campoCelular.value = valor;
 });
 
-// 6. Processamento do Formulário ao Clicar no Botão
+// 4. Processamento do Formulário ao Clicar no Botão
 btnCadastrar.addEventListener('click', function() {
     // Array com os campos estritamente OBRIGATÓRIOS (Celular mantido fora)
     const camposObrigatorios = [campoNome, campoCpf, campoEmail, campoArtista];
@@ -109,6 +80,22 @@ btnCadastrar.addEventListener('click', function() {
     // Mensagem de Sucesso na Tela
     divResultado.className = 'msg-sucesso';
     divResultado.innerText = `Intenção de compra registrada com sucesso para: ${dadosReserva.artista}! Comprovante exportado.`;
+ 
+    // NOVO: Monta o texto do comprovante seguindo o formato pedido no Doc 2
+const textoComprovante =
+`=== PRÉ-CADASTRO DE INGRESSO ROCK IN RIO ===
+Nome: ${dadosReserva.nome}
+CPF: ${dadosReserva.cpf}
+E-mail: ${dadosReserva.email}
+Celular: ${dadosReserva.celular}
+Atração Selecionada: ${dadosReserva.artista}
+===========================================`;
+
+    // NOVO: Nome dinâmico do arquivo, no padrão ingresso_nome_do_usuario.txt
+    const nomeArquivo = `ingresso_${dadosReserva.nome.replace(/\s+/g, '_')}.txt`;
+
+    // NOVO: Dispara o download automático usando a função de utils.js
+    salvarDadosEmTXT(textoComprovante, nomeArquivo);
 });
 
 // Inicialização: Carrega os dados de artistasData.js dentro do Datalist
