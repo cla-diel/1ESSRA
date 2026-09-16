@@ -1,3 +1,5 @@
+// utils.js - Módulo de funções genéricas reutilizáveis 
+
 // FUNÇÃO: Validação Matemática Algorítmica do CPF
 function validarCPF(cpf) {
     // Limpa pontuações mantendo apenas números
